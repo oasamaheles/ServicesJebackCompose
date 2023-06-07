@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- mobile networks and Wi-Fi -->
+    <!-- NETWORK_PROVIDER only -->
+    <!-- when the app only needs to know the user's approximate location, such as for location-based ads -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- location information from GPS, Wi-Fi, and mobile networks -->
+    <!-- using both GPS_PROVIDER and NETWORK_PROVIDER or GPS_PROVIDER only -->
+    <!-- when the app needs more precise location information, such as for turn-by-turn navigation -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ServicesJebackCompose"
+        tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCDli_jjC6YExNzetcExfey9qLBE0sUK9o" />
+
+        <activity
+            android:name=".view.screen.CreateOrderScreen"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ServicesJebackCompose" />
+
+        <activity
+            android:name=".view.screen.LoginScreen"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ServicesJebackCompose" />
+
+        <activity
+            android:name=".view.screen.RegisterScreen"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ServicesJebackCompose">
+
+        </activity>
+        <activity
+            android:name=".view.screen.HomeScreen"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ServicesJebackCompose">
+
+
+        </activity>
+
+        <activity
+            android:name=".viewModel.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ServicesJebackCompose">
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity>
+    </application>
+
+
+</manifest>

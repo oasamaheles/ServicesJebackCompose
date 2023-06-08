@@ -30,7 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.servicesjebackcompose.navigation.BottomNavGraph
-import com.example.servicesjebackcompose.view.items.BottomBarItems
+import com.example.servicesjebackcompose.view.view_helper.BottomAppBarItems
 import com.example.servicesjebackcompose.R;
 
 class HomeScreen : ComponentActivity() {
@@ -80,7 +80,7 @@ fun ManagementAllScreenBottomNavigation(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val items = listOf(
-        BottomBarItems.Service, BottomBarItems.Orders, BottomBarItems.User, BottomBarItems.More
+        BottomAppBarItems.Service, BottomAppBarItems.Orders, BottomAppBarItems.User, BottomAppBarItems.More
     )
 
     Scaffold(

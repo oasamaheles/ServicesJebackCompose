@@ -10,5 +10,21 @@
 
     <color name="background">#FEFEFE</color>
     <color name="background_card">#42A8F8</color>
+    <color name="white_dark">#FBFBFB</color>
+    <color name="gray_dark_text">#646781</color>
+    <color name="gray_dark_label">#707070</color>
+    <color name="gray_light_text">#7F8FA6</color>
+    <color name="gray_light_border">#C2CECE</color>
+    <color name="gray_text_light">#AFAFAF</color>
+    <color name="gray_background_text_input">#F2F6F6</color>
+    <color name="gray_background">#EAEFFF</color>
+    <color name="gray_background_customer_service">#F4F5F7</color>
+    <color name="blue_text_border">#0E4DFB</color>
+    <color name="blue_text_on_boarding">#0E9CF9</color>
+    <color name="blue_light">#6FC8FB</color>
+    <color name="bink_shape">#DE1487</color>
+    <color name="brown">#AF8344</color>
+    <color name="light_black">#222328</color>
+    <color name="purple_400">#E91E63</color>
 
 </resources>

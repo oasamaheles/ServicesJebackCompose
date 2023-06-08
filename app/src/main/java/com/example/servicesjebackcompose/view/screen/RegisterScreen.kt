@@ -7,15 +7,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -26,14 +21,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -41,28 +33,22 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.servicesjebackcompose.R
 import com.example.servicesjebackcompose.model.PreferenceManager
-import com.example.servicesjebackcompose.view.items.CustomButton
-import com.example.servicesjebackcompose.view.items.CustomDropdownMenu
+import com.example.servicesjebackcompose.view.view_helper.ButtonApp
+import com.example.servicesjebackcompose.view.view_helper.CustomDropdownMenu
 import com.example.servicesjebackcompose.viewModel.AllWorkViewModel
 import com.example.servicesjebackcompose.viewModel.RegisterViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import com.google.android.material.tabs.TabItem
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 class RegisterScreen : ComponentActivity() {
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
-            Scaffold {
                 val registerViewModel: RegisterViewModel = viewModel()
                 val isRegistered by registerViewModel.isRegistered.collectAsState()
                 val error by registerViewModel.error.collectAsState()
@@ -96,10 +82,7 @@ class RegisterScreen : ComponentActivity() {
                 }
 
                 RegisterScreenView(registerViewModel)
-            }
         }
-
-
     }
 
     override fun onBackPressed() {
@@ -107,7 +90,7 @@ class RegisterScreen : ComponentActivity() {
     }
 }
 
-@SuppressLint("SuspiciousIndentation")
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun RegisterScreenView(viewModel: RegisterViewModel) {
@@ -164,12 +147,6 @@ fun RegisterScreenView(viewModel: RegisterViewModel) {
             // Define the TabItem class
             data class TabItem(val title: String, val screen: @Composable () -> Unit)
 
-            // Create the tabRowItemsLogin list
-            val tabRowItemsLogin = listOf(
-                TabItem(title = "Service Provider") { ServiceRegisterView(viewModel) },
-                TabItem(title = "Customer") { CustomerRegisterView(viewModel) }
-            )
-
             val startColor = Color(0xFF346EDF)
             val endColor = Color(0xFF6FC8FB)
 
@@ -185,6 +162,7 @@ fun RegisterScreenView(viewModel: RegisterViewModel) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // Create the tabRowItemsLogin list
                 val tabRowItemsLogin = listOf(
                     TabItem(title = "Service Provider") { ServiceRegisterView(viewModel) },
                     TabItem(title = "Customer") { CustomerRegisterView(viewModel) }
@@ -257,16 +235,13 @@ fun CustomerRegisterView(viewModel: RegisterViewModel) {
     fun isValidPhoneNumber(phoneNumber: String): Boolean {
         return phoneNumber.length == 10
     }
-
     fun isValidEmail(email: String): Boolean {
-        // Implement your email validation logic here
-        // Return true if the email is valid, false otherwise
         val emailRegex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
         return email.matches(emailRegex)
     }
 
 
-    val btnSignIn = Color(0xFF0E4DFB) // Green color
+    val btnSignIn = Color(0xFF0E4DFB)
 
     val emailState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
@@ -277,16 +252,6 @@ fun CustomerRegisterView(viewModel: RegisterViewModel) {
     var isEmailError by remember { mutableStateOf(false) }
     var isPhoneNumberError by remember { mutableStateOf(false) }
     var isPasswordError by remember { mutableStateOf(false) }
-
-    val viewModel: AllWorkViewModel = viewModel()
-    val listModel = viewModel.listAllWorkLiveData
-
-    val dropDownItems = mutableListOf<String>()
-    viewModel.getAllWork()
-
-    listModel.forEach { item ->
-        dropDownItems.add(item.name.toString())
-    }
 
     Column(
         modifier = Modifier
@@ -347,8 +312,6 @@ fun CustomerRegisterView(viewModel: RegisterViewModel) {
         )
         Spacer(modifier = Modifier.height(12.dp))
 
-        CustomDropdownMenu(dropDownItems)
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -397,7 +360,14 @@ fun CustomerRegisterView(viewModel: RegisterViewModel) {
 
                 val context = LocalContext.current
 
-                TextButton(onClick = { navigateToLoginScreen(context) }) {
+                TextButton(onClick = {
+                    val name = fullNameState.value.text
+                    val email = emailState.value.text
+                    val password = passwordState.value.text
+                    val phone = phoneNumberState.value.text
+
+                    viewModel.register(name, email, password, phone)
+                }) {
                     Text(
                         fontSize = 16.sp,
                         color = Color.Blue,
@@ -420,7 +390,7 @@ fun CustomerRegisterView(viewModel: RegisterViewModel) {
 
             val context = LocalContext.current
 
-            CustomButton(
+            ButtonApp(
                 onClick = { navigateToLoginScreen(context) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -443,7 +413,7 @@ fun CustomerRegisterView(viewModel: RegisterViewModel) {
 }
 
 @Composable
-fun ServiceRegisterView(viewModel: RegisterViewModel) {
+fun ServiceRegisterView(registerViewModel: RegisterViewModel) {
     val MIN_USERNAME_LENGTH = 5
     val MIN_PASSWORD_LENGTH = 8
     fun isValidPhoneNumber(phoneNumber: String): Boolean {
@@ -468,6 +438,19 @@ fun ServiceRegisterView(viewModel: RegisterViewModel) {
     var isEmailError by remember { mutableStateOf(false) }
     var isPhoneNumberError by remember { mutableStateOf(false) }
     var isPasswordError by remember { mutableStateOf(false) }
+
+
+    val viewModel: AllWorkViewModel = viewModel()
+    val listModel = viewModel.listAllWorkLiveData
+
+
+    val dropDownItems = mutableListOf<String>()
+    viewModel.getAllWork()
+
+    listModel.forEach { item ->
+        dropDownItems.add(item.name.toString())
+    }
+
 
     Column(
         modifier = Modifier
@@ -527,6 +510,7 @@ fun ServiceRegisterView(viewModel: RegisterViewModel) {
         )
         Spacer(modifier = Modifier.height(12.dp))
 
+        CustomDropdownMenu(dropDownItems)
 
         Row(
             modifier = Modifier
@@ -593,7 +577,7 @@ fun ServiceRegisterView(viewModel: RegisterViewModel) {
 
             val context = LocalContext.current
 
-            CustomButton(
+            ButtonApp(
                 onClick = {
 
                     val name = fullNameState.value.text
@@ -601,7 +585,7 @@ fun ServiceRegisterView(viewModel: RegisterViewModel) {
                     val password = passwordState.value.text
                     val phone = phoneNumberState.value.text
 
-                    viewModel.register(name, email, password, phone)
+                    registerViewModel.register(name, email, password, phone)
 
                 },
                 modifier = Modifier

@@ -3,7 +3,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -16,14 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.servicesjebackcompose.R
-import com.example.servicesjebackcompose.view.items.CustomButton
 
 
 @Composable
@@ -54,7 +51,7 @@ fun OnBoardingScreen2(navMainController: NavController) {
         val btnEndColor = Color(0xFF6FC8FB)
         val btnStartColor = Color(0xFF346EDF)
         TextButton(
-            onClick = { navMainController.navigate("OnBoardingScreen3") },
+            onClick = { navMainController.navigate("OnBoarding_three") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 35.dp, end = 35.dp, bottom = 34.dp)

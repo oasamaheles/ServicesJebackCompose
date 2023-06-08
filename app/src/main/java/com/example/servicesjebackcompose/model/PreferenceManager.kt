@@ -5,9 +5,15 @@ import android.content.SharedPreferences
 
 class PreferenceManager(private val context: Context) {
 
+    companion object {
+        private const val PREF_NAME = "preference_data"
+        private const val KEY_TOKEN = "token"
+        private const val KEY_USER_ID = "userId"
+        private const val KEY_USER_PHONE = "userPhone"
+    }
+
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-
 
     fun saveToken(token: String) {
         sharedPreferences.edit().putString(KEY_TOKEN, "Bearer $token").apply()
@@ -49,10 +55,5 @@ class PreferenceManager(private val context: Context) {
         sharedPreferences.edit().remove(KEY_TOKEN).apply()
     }
 
-    companion object {
-        private const val PREF_NAME = "user_preference_data"
-        private const val KEY_TOKEN = "token"
-        private const val KEY_USER_ID = "userId"
-        private const val KEY_USER_PHONE = "userPhone"
-    }
+
 }

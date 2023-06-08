@@ -49,7 +49,7 @@ fun SplashScreen(navMainController: NavController) {
             delay(2600)
             if (tokenCheck) {
                 preferenceManager.saveUserId(-1)
-                navMainController.navigate("OnBoardingScreen")
+                navMainController.navigate("OnBoarding_one")
 
             } else {
                 navigateToHomeScreen(context)

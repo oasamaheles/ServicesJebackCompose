@@ -262,7 +262,7 @@ fun Login(loginViewModel: LoginViewModel) {
                                                 color = btnSignIn
                                             )
                                         ) {
-                                            append("Sign In")
+                                            append("SIGN IN")
                                         }
                                     }
                                 )
@@ -286,10 +286,9 @@ fun Login(loginViewModel: LoginViewModel) {
                                     password = password
                                 )
 
-
                             }
                         ) {
-                            Text(text = "Sign Up", color = Color.White)
+                            Text(text = "SIGN UP", color = Color.White)
                         }
                     }
                     Spacer(modifier = Modifier.height(130.dp))
@@ -426,7 +425,7 @@ fun Login(loginViewModel: LoginViewModel) {
                                                 color = btnSignIn
                                             )
                                         ) {
-                                            append("Sign up")
+                                            append("SIGN IN")
                                         }
                                     }
                                 )
@@ -454,7 +453,7 @@ fun Login(loginViewModel: LoginViewModel) {
 
                             }
                         ) {
-                            Text(text = "LOGIN", color = Color.White)
+                            Text(text = "Sign Up", color = Color.White)
                         }
                     }
                     Spacer(modifier = Modifier.height(130.dp))

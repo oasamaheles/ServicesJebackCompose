@@ -1,4 +1,4 @@
-package com.and.dev.homeservice.model
+package com.example.servicesjebackcompose.model
 
 data class LoginRequest(
     val email: String,

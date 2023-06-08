@@ -25,20 +25,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.servicesjebackcompose.view.items.ItemWorkServiceCard
+import com.example.servicesjebackcompose.view.view_helper.ItemWorkServiceCard
 import com.example.servicesjebackcompose.viewModel.AllWorkViewModel
 import com.example.servicesjebackcompose.R
 import com.example.servicesjebackcompose.model.PreferenceManager
@@ -60,6 +58,21 @@ fun ServiceScreen() {
 
 
     viewModel.getAllWork()
+
+
+
+
+
+
+
+//    val AllWorkViewModel:ViewModel = AllWorkViewModel()
+
+
+
+    //todo 800701
+
+
+
 
     Column(modifier = Modifier.fillMaxSize()) {
         androidx.compose.material.Card(
@@ -210,7 +223,8 @@ fun ServiceScreen() {
                                 navigateToCreateOrderClass(
                                     context = context,
                                     it,
-                                    itemName = item.name.toString()
+                                    itemName = item.name.toString(),
+                                    icons = item.icon
                                 )
                             }
                         } else {
@@ -273,7 +287,12 @@ fun DotsIndicator(
 
 }
 
-private fun navigateToCreateOrderClass(context: Context, itemId: Int, itemName: String) {
+private fun navigateToCreateOrderClass(
+    context: Context,
+    itemId: Int,
+    itemName: String,
+    icons: String?
+) {
     val intent = Intent(context, CreateOrderScreen::class.java).apply {
         putExtra("itemId", itemId)
         putExtra("itemName", itemName)
@@ -287,5 +306,8 @@ private fun navigateToLoginScreen(context: Context) {
     }
     context.startActivity(intent)
 }
+
+
+
 
 

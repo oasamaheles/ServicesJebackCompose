@@ -1,10 +1,9 @@
-package com.example.servicesjebackcompose.view.items
+package com.example.servicesjebackcompose.view.view_helper
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +14,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun CustomButton(
+fun ButtonApp(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     gradientColors: List<Color>,
@@ -51,4 +50,3 @@ fun CustomButton(
         }
     }
 }
-

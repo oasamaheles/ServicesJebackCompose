@@ -1,6 +1,8 @@
-package com.example.servicesjebackcompose.view.items
+package com.example.servicesjebackcompose.view.view_helper
 
+import android.os.Build
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -10,14 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.example.servicesjebackcompose.model.OrderRequestData
+import com.example.servicesjebackcompose.model.OrderRequestPhoto
 import java.time.Instant
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -25,10 +28,9 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun OrderDetailsItem(model: OrderRequestData) {
 
-
     Card(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(8.dp)
             .fillMaxWidth()
             .wrapContentWidth()
             .border(
@@ -46,12 +48,14 @@ fun OrderDetailsItem(model: OrderRequestData) {
             verticalArrangement = Arrangement.Center
         ) {
 
-            Row(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)) {
 
                 Text(
                     text = "Order id:  ${model.id}",
                     style = TextStyle(
-                        fontFamily = FontFamily.Cursive,
+
                         color = Color(0xFF488CE7),
                         fontSize = 12.sp,
                         textAlign = TextAlign.Start
@@ -60,18 +64,27 @@ fun OrderDetailsItem(model: OrderRequestData) {
                 )
 
 
-                val inst: OffsetDateTime = OffsetDateTime.ofInstant(
-                    Instant.parse(model.createdAt.toString()),
-                    ZoneId.systemDefault()
-                )
+                val inst: OffsetDateTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    OffsetDateTime.ofInstant(
+                        Instant.parse(model.createdAt.toString()),
+                        ZoneId.systemDefault()
+                    )
+                } else {
+                    TODO("VERSION.SDK_INT < O")
+                }
 
-                val res =  DateTimeFormatter.ofPattern("MMM dd, yyyy").format(inst)
+                val res = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    DateTimeFormatter.ofPattern("MMM dd, yyyy").format(inst)
+                } else {
+                    TODO("VERSION.SDK_INT < O")
+                }
+
 
                 Text(
                     text = "Date : $res",
                     style = TextStyle(
                         color = Color.Gray,
-                        fontFamily = FontFamily.Cursive,
+
                         fontSize = 8.sp,
                         textAlign = TextAlign.End
                     ),
@@ -80,9 +93,19 @@ fun OrderDetailsItem(model: OrderRequestData) {
                         .align(alignment = Alignment.CenterVertically)
                         .weight(1f)
                 )
+//
+//                model.photoOrder?.let { resourceId ->
+//                    val painter = painterResource(resourceId)
+//                    Image(
+//                        painter = painter,
+//                        contentDescription = "Image",
+//                        modifier = Modifier
+//                            .size(40.dp)
+//                            .padding(start = 8.dp)
+//                    )
+//                }
 
             }
-
 
             Row(
                 modifier = Modifier
@@ -96,7 +119,7 @@ fun OrderDetailsItem(model: OrderRequestData) {
                         color = Color.Gray,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Start,
-                        fontFamily = FontFamily.Cursive,
+                        
 
                         ), modifier = Modifier.padding(bottom = 6.dp)
                 )
@@ -104,7 +127,7 @@ fun OrderDetailsItem(model: OrderRequestData) {
                 Text(
                     text = "Carpenter",
                     style = TextStyle(
-                        fontFamily = FontFamily.Cursive,
+                        
 
                         color = Color(0xFF488CE7),
                         fontSize = 10.sp,
@@ -120,4 +143,18 @@ fun OrderDetailsItem(model: OrderRequestData) {
 
         }
     }
+
 }
+@Composable
+fun LoadImageFromUrl(url: ArrayList<OrderRequestPhoto>) {
+    val painter: Painter = rememberImagePainter(url)
+    Image(
+        painter = painter,
+        contentDescription = "Image",
+        modifier = Modifier
+            .size(40.dp)
+            .padding(start = 8.dp)
+    )
+}
+
+

@@ -1,4 +1,4 @@
-package com.example.servicesjebackcompose.viewModel
+package com.example.servicesjebackcompose
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -27,6 +27,6 @@ fun Greeting(name: String) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-        Greeting("Android")
+        Greeting("User in MyApp")
 
 }

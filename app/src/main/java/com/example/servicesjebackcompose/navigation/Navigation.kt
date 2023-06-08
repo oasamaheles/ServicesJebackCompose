@@ -4,10 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.servicesjebackcompose.view.screen.OnBoardingScreen
-import com.example.servicesjebackcompose.view.screen.OnBoardingScreen2
-import com.example.servicesjebackcompose.view.screen.OnBoardingScreen3
-import com.example.servicesjebackcompose.view.screen.SplashScreen
+import com.example.servicesjebackcompose.view.screen.*
 
 @Composable
 fun Navigation() {
@@ -18,19 +15,21 @@ fun Navigation() {
             SplashScreen(navMainController = navMainController)
         }
 
-        composable(route = "OnBoardingScreen") {
+        composable(route = "OnBoarding_one") {
             OnBoardingScreen(navMainController = navMainController)
         }
 
-        composable(route = "OnBoardingScreen2") {
+        composable(route = "OnBoarding_two") {
             OnBoardingScreen2(navMainController = navMainController)
         }
 
-        composable(route = "OnBoardingScreen3") {
+        composable(route = "OnBoarding_three") {
             OnBoardingScreen3(navMainController = navMainController)
         }
-
-
+//
+//        composable(route = "ChangePassword") {
+//            ChangePassword(navMainController = navMainController)
+//        }
 
     }
 }

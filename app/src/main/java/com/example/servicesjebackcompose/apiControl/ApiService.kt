@@ -1,6 +1,5 @@
-package com.example.servicesjebackcompose.apiService
+package com.example.servicesjebackcompose.apiControl
 
-import com.and.dev.homeservice.model.*
 import com.example.servicesjebackcompose.model.AllWorkResponse
 import com.example.servicesjebackcompose.model.CreateOrderRequestResponse
 import com.example.servicesjebackcompose.model.LoginResponse
@@ -12,12 +11,27 @@ import retrofit2.http.*
 
 interface ApiService {
 
+    companion object {
+        private const val BASE_URL = "https://studentucas.awamr.com/api/"
+
+        var apiService: ApiService? = null
+
+        fun geInstance(): ApiService {
+            if (apiService == null) {
+                apiService = Retrofit.Builder().baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create()).build()
+                    .create(ApiService::class.java)
+            }
+            return apiService!!
+        }
+
+
+    }
 
     @FormUrlEncoded
     @POST("auth/login/user")
     suspend fun login(
-        @Field("email") email: String,
-        @Field("password") password: String
+        @Field("email") email: String, @Field("password") password: String
     ): Response<LoginResponse>
 
     @FormUrlEncoded
@@ -57,23 +71,5 @@ interface ApiService {
     @GET("order/complete/user")
     suspend fun getCompletedOrder(@Header("Authorization") token: String): CreateOrderRequestResponse
 
-
-    companion object {
-        private const val BASE_URL = "https://studentucas.awamr.com/api/"
-
-        var apiService: ApiService? = null
-
-        fun geInstance(): ApiService {
-            if (apiService == null) {
-                apiService = Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(ApiService::class.java)
-            }
-            return apiService!!
-        }
-
-
-    }
 
 }

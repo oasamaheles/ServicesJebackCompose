@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,7 +13,10 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -26,7 +30,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -42,28 +45,24 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.servicesjebackcompose.R
 import com.example.servicesjebackcompose.model.PreferenceManager
-import com.example.servicesjebackcompose.view.items.CustomButton
+import com.example.servicesjebackcompose.view.view_helper.ButtonApp
 import com.example.servicesjebackcompose.viewModel.CreateOrderViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.*
 
 
 class CreateOrderScreen : ComponentActivity(), LifecycleOwner {
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val createOrderViewModel: CreateOrderViewModel by viewModels()
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
 
         setContent {
-
 
             val itemId = intent.getIntExtra("itemId", -1)
             val itemName = intent.getStringExtra("itemName")
@@ -74,58 +73,54 @@ class CreateOrderScreen : ComponentActivity(), LifecycleOwner {
             val userId = preferenceManager.getUserID()
 
 
-                NavHost(navController, startDestination = "createOrderProblemDetailsScreen") {
+            NavHost(navController, startDestination = "createOrderProblemDetailsScreen") {
 
 
-                    composable("createOrderDone") {
-                        CreateOrderDone(navController)
-                    }
+                composable("createOrderDone") {
+                    CreateOrderDone(navController)
+                }
 
-                    composable("createOrderProblemDetailsScreen") {
+                composable("createOrderProblemDetailsScreen") {
+                    if (itemName != null) {
+                        val userPhone = preferenceManager.getUserPhone()
 
+                        createOrderViewModel.newOrderRequestResponse.observe(this@CreateOrderScreen) { response ->
 
-
-
-                        if (itemName != null) {
-                            val userPhone = preferenceManager.getUserPhone()
-
-                            createOrderViewModel.newOrderRequestResponse.observe(this@CreateOrderScreen) { response ->
-
-                                if (response.success == true) {
-                                    navController.navigate("createOrderDone")
-                                } else {
-                                    Toast.makeText(
-                                        this@CreateOrderScreen,
-                                        "Error : ${response.message}",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-
-                                }
-                            }
-
-                            createOrderViewModel.error.observe(this@CreateOrderScreen) { errorMessage ->
+                            if (response.success == true) {
+                                navController.navigate("createOrderDone")
+                            } else {
                                 Toast.makeText(
                                     this@CreateOrderScreen,
-                                    errorMessage,
+                                    "Error : ${response.message}",
                                     Toast.LENGTH_LONG
                                 ).show()
 
                             }
-                            CreateOrderProblemDetailsScreen(
-                                navController = navController,
-                                itemId = itemId,
-                                itemName = itemName,
-                                userId = userId,
-                                userPhone = userPhone.toString(), viewModel = createOrderViewModel
-                            )
-                        } else {
-                            Toast.makeText(context, "No Service Name", Toast.LENGTH_LONG).show()
                         }
 
+                        createOrderViewModel.error.observe(this@CreateOrderScreen) { errorMessage ->
+                            Toast.makeText(
+                                this@CreateOrderScreen,
+                                errorMessage,
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                        }
+                        CreateOrderProblemDetailsScreen(
+                            navController = navController,
+                            itemId = itemId,
+                            itemName = itemName,
+                            userId = userId,
+                            userPhone = userPhone.toString(), viewModel = createOrderViewModel
+                        )
+                    } else {
+                        Toast.makeText(context, "No Service Name", Toast.LENGTH_LONG).show()
                     }
 
-
                 }
+
+
+            }
 
         }
     }
@@ -180,10 +175,7 @@ fun CreateOrderProblemDetailsScreen(
         position = CameraPosition.fromLatLngZoom(singapore, 10f)
     }
 
-
-
-
-
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -206,7 +198,6 @@ fun CreateOrderProblemDetailsScreen(
                 ),
         ) {
 
-            val context = LocalContext.current
             IconButton(onClick = { navigateToHome(context = context) }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -221,19 +212,20 @@ fun CreateOrderProblemDetailsScreen(
             Text(
                 text = itemName, style = TextStyle(
                     fontSize = 18.sp,
-                    fontFamily = FontFamily.Cursive,
+
                     textAlign = TextAlign.Center,
                     color = Color.White
                 ), modifier = Modifier.align(alignment = Alignment.Center)
             )
         }
 
-
-
         Box(
             Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp, start = 16.dp, end = 16.dp)
+                .clickable {
+                    openGallery(context)
+                }
                 .border(
                     BorderStroke(1.dp, Color(0xFF868686)), shape = RoundedCornerShape(6.dp)
                 ),
@@ -257,7 +249,7 @@ fun CreateOrderProblemDetailsScreen(
                 Text(
                     text = "Image Problem", style = TextStyle(
                         fontSize = 12.sp,
-                        fontFamily = FontFamily.Cursive,
+
                         textAlign = TextAlign.Center,
                         color = Color.Gray
                     ), modifier = Modifier.align(alignment = Alignment.Center)
@@ -270,7 +262,7 @@ fun CreateOrderProblemDetailsScreen(
         Text(
             text = "image must be no more than 2 MB Max 5 Image", style = TextStyle(
                 fontSize = 8.sp,
-                fontFamily = FontFamily.Cursive,
+
                 textAlign = TextAlign.Start,
                 color = Color.Gray
             ), modifier = Modifier
@@ -294,7 +286,7 @@ fun CreateOrderProblemDetailsScreen(
                     Text(
                         text = "More Details About Problem …",
                         modifier = Modifier.padding(2.dp),
-                        fontFamily = FontFamily.Cursive,
+
 
                         color = Color.Gray,
                         fontSize = 14.sp
@@ -312,7 +304,7 @@ fun CreateOrderProblemDetailsScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 textStyle = TextStyle(
                     fontSize = 14.sp,
-                    fontFamily = FontFamily.Cursive,
+
                     textAlign = TextAlign.Start
                 )
             )
@@ -320,18 +312,42 @@ fun CreateOrderProblemDetailsScreen(
 
         }
 
+        fun onMapClick(coordinates: LatLng) {
+            val latitude = coordinates.latitude
+            val longitude = coordinates.longitude
+            println("Latitude: $latitude, Longitude: $longitude")
+            val toastMessage = "Latitude: $latitude, Longitude: $longitude"
+            Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
+
+        }
+
+        data class LatLng(val latitude: Double, val longitude: Double)
+
+        val coordinatesText = remember { mutableStateOf("") }
 
         GoogleMap(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
                 .padding(16.dp),
-            cameraPositionState = cameraPositionState
+            properties = MapProperties(
+                isMyLocationEnabled = true,
+                isBuildingEnabled = true,
+                isTrafficEnabled = true,
+                isIndoorEnabled = true,
+            ),
+            uiSettings = MapUiSettings(compassEnabled = true),
+            cameraPositionState = cameraPositionState,
+            onMapClick = { coordinates ->
+                coordinatesText.value =
+                    "Latitude: ${coordinates.latitude}, Longitude: ${coordinates.longitude}"
+                onMapClick(coordinates)
+            }
         ) {
             Marker(
                 state = MarkerState(position = singapore),
                 title = "London",
-                snippet = "Marker in Big Ben"
+                snippet = "Marker in Big Ben",
             )
         }
 
@@ -349,7 +365,7 @@ fun CreateOrderProblemDetailsScreen(
                     Text(
                         text = "Location Address Details …",
                         modifier = Modifier.padding(2.dp),
-                        fontFamily = FontFamily.Cursive,
+
                         color = Color.Gray,
                         fontSize = 14.sp
 
@@ -366,7 +382,7 @@ fun CreateOrderProblemDetailsScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 textStyle = TextStyle(
                     fontSize = 14.sp,
-                    fontFamily = FontFamily.Cursive,
+
                     textAlign = TextAlign.Start
                 )
             )
@@ -376,7 +392,7 @@ fun CreateOrderProblemDetailsScreen(
 
         val context = LocalContext.current
 
-        CustomButton(
+        ButtonApp(
             onClick = {
 
                 val problemDes = problemState.value.text
@@ -393,8 +409,7 @@ fun CreateOrderProblemDetailsScreen(
                     singapore.latitude.toString(),
                     singapore.longitude.toString(),
                     userPhone,
-
-                    )
+                )
 
 
             },
@@ -409,7 +424,7 @@ fun CreateOrderProblemDetailsScreen(
             Text(
                 text = "Create Order",
                 fontSize = 16.sp,
-                fontFamily = FontFamily.Cursive,
+
 
                 color = Color.White,
                 modifier = Modifier.padding(8.dp)
@@ -450,7 +465,7 @@ fun CreateOrderDone(navController: NavController) {
                 text = "ORDER Done!",
                 color = Color(0xff0E9CF9),
                 fontSize = 23.sp,
-                fontFamily = FontFamily.Cursive,
+
 
                 textAlign = TextAlign.Center,
             )
@@ -460,7 +475,7 @@ fun CreateOrderDone(navController: NavController) {
                 color = Color(0xFF636363),
                 modifier = Modifier.padding(top = 16.dp),
                 fontSize = 12.sp,
-                fontFamily = FontFamily.Cursive,
+
 
                 textAlign = TextAlign.Center,
             )
@@ -474,7 +489,7 @@ fun CreateOrderDone(navController: NavController) {
             ) {
 
                 val context = LocalContext.current
-                CustomButton(
+                ButtonApp(
                     onClick = { navigateToHome(context) },
                     modifier = Modifier
                         .padding(16.dp)
@@ -488,7 +503,7 @@ fun CreateOrderDone(navController: NavController) {
                         text = "Go to Home",
                         color = Color.White,
                         fontSize = 16.sp,
-                        fontFamily = FontFamily.Cursive,
+
 
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(8.dp)
@@ -508,7 +523,11 @@ private fun navigateToHome(context: Context) {
     context.startActivity(intent)
 }
 
-
+private fun openGallery(context: Context) {
+    val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+    // You can add additional flags or parameters to the intent if needed
+    context.startActivity(intent)
+}
 
 
 

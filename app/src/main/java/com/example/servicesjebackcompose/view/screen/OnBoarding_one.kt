@@ -52,7 +52,7 @@ fun OnBoardingScreen(navMainController: NavController) {
         val btnEndColor = Color(0xFF6FC8FB)
         val btnStartColor = Color(0xFF346EDF)
         TextButton(
-            onClick = { navMainController.navigate("OnBoardingScreen2") },
+            onClick = { navMainController.navigate("OnBoarding_two") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 35.dp, end = 35.dp, bottom = 34.dp)

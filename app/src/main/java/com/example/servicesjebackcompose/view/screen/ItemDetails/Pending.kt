@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.servicesjebackcompose.model.PreferenceManager
-import com.example.servicesjebackcompose.view.items.OrderDetailsItem
+import com.example.servicesjebackcompose.view.view_helper.OrderDetailsItem
 import com.example.servicesjebackcompose.viewModel.GetPendingOrdersViewModel
 
 @Composable
@@ -57,7 +57,7 @@ fun Pending (){
         ) {
 
         }
-        Toast.makeText(context, "Please Login to show your order", Toast.LENGTH_SHORT)
+        Toast.makeText(context, "Please Login to benefit from the service", Toast.LENGTH_SHORT)
             .show()
     }
 

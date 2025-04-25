@@ -2,14 +2,6 @@
 
 An Android application built with **Jetpack Compose** that provides a variety of essential services in a clean, modern UI. The app displays a list of services with their details and allows users to navigate between screens seamlessly.
 
----
-
-## 📱 Screenshots
-
-*(Add screenshots of your app here – you can capture them from the emulator or a real device.)*
-
----
-
 ## ✨ Features
 
 - Fully developed UI using **Jetpack Compose**.
